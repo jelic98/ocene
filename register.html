@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <link rel="icon" href="icon-outline.ico" type="icon/ico">
+        <title>Registracija</title>
+        <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+        <link href="main.css" rel='stylesheet' type='text/css'/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <div class="form">
+            <h1>Registracija</h1>
+            <form class="w3-container" action="register.php" method="post">
+                <p><input class="w3-input" name="username" type="text" placeholder="Korisnicko ime" required autofocus></p>
+                <p><input class="w3-input" name="password" type="password" placeholder="Lozinka" required></p>
+                <p><input class="w3-input" name="repeat" type="password" placeholder="Ponovi lozinku" required></p>
+                <button class="red" onclick="back()"><i class="fa fa-arrow-left"></i> Nazad</button>
+                <button class="green" type="submit"><i class="fa fa-user"></i> Registruj se</button>
+            </form>
+        </div>
+        <script>
+            function back() {
+                document.location.href = "index.php"; 
+            }
+        </script>
+    </body>
+</html>
