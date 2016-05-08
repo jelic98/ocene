@@ -227,7 +227,7 @@ if(!empty($_SESSION['id'])) {
 			echo '<a href="logout.php"><button class="red"><i class="fa fa-sign-out"></i> Odjavi se</button></a>';
 		}else {
 			echo '<div class="center">';
-			echo '<h1 id="h1">Cloud Ocene.</h1>';
+			echo '<h1 id="h1">Cloud Ocene</h1>';
 			echo '<a class="buttons" href="login.html"><button class="blue"><i class="fa fa-sign-in"></i> Prijava</button></a>';
 			echo '<a class="buttons" href="register.html"><button class="green"><i class="fa fa-user"></i> Registracija</button></a>';
 			echo '<p id="p">Popravi prosek!</p>';
