@@ -4,7 +4,7 @@ require_once('connection.php');
 
 $login = 0;
 
-if(!empty($_SESSION['id'])) {
+if(!empty($_SESSION['username'])) {
 	$login = 1; 
 }
 ?>

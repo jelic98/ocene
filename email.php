@@ -2,41 +2,38 @@
 require_once('connection.php');
 require_once('functions.php');
 
-$email = htmlspecialchars(strip_tags($_POST['email']));
-$username = htmlspecialchars(strip_tags($_POST['username']));
-$username = mysqli_real_escape_string($connect, $username);
+$email = strip($_POST['email'], $connect);
+$username = strip($_POST['username'], $connect);
 
-$cmd = "SELECT * FROM `ucenik` WHERE `username`='$username'";
-$rows = mysqli_query($connect, $cmd) or die(mysqli_error($connect));
+$predmeti = array();
+
+$cmd = "SHOW COLUMNS FROM `".$username."`;";
+$result = mysqli_query($connect, $cmd);
+
+while($row = mysqli_fetch_array($result)){
+	$predmeti[] = $row['Field'];
+}
+
+$cmd = "SELECT * FROM `".$username."`;";
+$rows = mysqli_query($connect, $cmd);
 
 $number_of_rows = mysqli_num_rows($rows);
 
 if($number_of_rows == 0) {
-	handleError("Korisnik ne postoji");
+	show_error("Korisnik ne postoji");
 }else{
 	$ocene = array();
-	$predmeti = array("srpski","engleski","drstr","filozofija","istorija","geografija","biologija","matematika","fizika","informatika","hemija","fizicko","vladanje");
 	$body = "";
 
-	if($rows) {
-		while($row = mysqli_fetch_array($rows)) {
-			$ocene[0] = $row['srp'];
-			$ocene[1] = $row['eng'];
-			$ocene[2] = $row['jez'];
-			$ocene[3] = $row['fil'];
-			$ocene[4] = $row['ist'];
-			$ocene[5] = $row['geo'];
-			$ocene[6] = $row['bio'];
-			$ocene[7] = $row['mat'];
-			$ocene[8] = $row['fiz'];
-			$ocene[9] = $row['inf'];
-			$ocene[10] = $row['hem'];
-			$ocene[11] = $row['fzc'];
-			$ocene[12] = $row['vla'];
-		}
+	$cmd = "SELECT * FROM `".$username."`;";
+	$result = mysqli_query($connect, $cmd);
+	$rows = mysqli_fetch_row($result);
+
+	for($i = 0; $i < count($predmeti); $i++) {
+		$ocene[$i] = $rows[$i];
 	}
 
-	for($i = 0; $i <= 12; $i++) {
+	for($i = 0; $i < count($predmeti); $i++) {
 		$string = $ocene[$i];
 		$body .= $predmeti[$i];
 
@@ -52,7 +49,7 @@ if($number_of_rows == 0) {
 		$body .= "\n";
 	}
 
-	mail($email, "Ocena korisnika ".$username, $body, "From: ocene@ecloga.org") or die("Slanje nije uspelo");
+	mail($email, "Ocene korisnika ".$username, $body, "From: ocene@ecloga.org") or die("Slanje nije uspelo");
 	header("location: index.php");
 	mysqli_close($connect);
 }

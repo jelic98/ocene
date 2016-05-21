@@ -1,4 +1,4 @@
-@import url("http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,400,600");
+@import url("http://fonts.googleapis.com/css?family=Source+Sans+Pro:300");
 
 html { 
 	background: url(bg_new.jpg) no-repeat center center fixed; 
@@ -74,10 +74,9 @@ input[type=text], input[type=password], input[type=email], #msg {
 .form {
 	color: #fff;
 	width: 50%;
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+	height: 50%;
+	position: relative;
+	margin: 0 auto;
 }
 
 .saveti {

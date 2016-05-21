@@ -4,7 +4,7 @@ require_once('connection.php');
 
 $login = 0;
 
-if(!empty($_SESSION['id'])) {
+if(!empty($_SESSION['username'])) {
 	$login = 1; 
 }
 ?>
@@ -18,39 +18,22 @@ if(!empty($_SESSION['id'])) {
 	<body>  
 		<?php
 		if($login == 1) {
-			$predmeti = array("srpski","engleski","drstr","filozofija","istorija","geografija","biologija","matematika","fizika","informatika","hemija","fizicko","vladanje");
+			$predmeti = array();
 			$ocene = array();
 
-			$id = $_SESSION['id'];
+			$username = $_SESSION['username'];
 
-			$cmd = "SELECT * FROM `ucenik` WHERE `id`='$id'";
-			$rows = mysqli_query($connect, $cmd) or die(mysqli_error($connect));
+			$cmd = "SHOW COLUMNS FROM `".$username."`;";
+			$result = mysqli_query($connect, $cmd);
 
-			$number_of_rows = mysqli_num_rows($rows);
-
-			if($rows) {
-				while($row = mysqli_fetch_array($rows)) {
-					$username = $row['username'];
-					$_SESSION['srpski'] = $row['srp'];
-					$_SESSION['engleski'] = $row['eng'];
-					$_SESSION['drstr'] = $row['jez'];
-					$_SESSION['filozofija'] = $row['fil'];
-					$_SESSION['istorija'] = $row['ist'];
-					$_SESSION['geografija'] = $row['geo'];
-					$_SESSION['biologija'] = $row['bio'];
-					$_SESSION['matematika'] = $row['mat'];
-					$_SESSION['fizika'] = $row['fiz'];
-					$_SESSION['informatika'] = $row['inf'];
-					$_SESSION['hemija'] = $row['hem'];
-					$_SESSION['fizicko'] = $row['fzc'];
-					$_SESSION['vladanje'] = $row['vla'];
-				}
+			while($row = mysqli_fetch_array($result)){
+				$predmeti[] = $row['Field'];
 			}
 
 			mysqli_close($connect);
 
-			for($i = 1; $i <= 13; $i++) {
-				$string = $_SESSION[$predmeti[$i-1]];
+			for($i = 1; $i <= count($predmeti); $i++) {
+				$string = $_SESSION[$predmeti[$i - 1]];
 				$temp = array();
 
 				while(strlen($string) > 0) {
@@ -89,7 +72,7 @@ if(!empty($_SESSION['id'])) {
 				echo '<td class="prva '.$red.'">'.strtoupper($predmeti[$index-1]).'</td>';
 
 				echo '<td class="druga '.$red.'">';
-				echo '<input name="'.$predmeti[$index-1].'" type="text" value="';
+				echo '<input name="'.$predmeti[$index - 1].'" type="text" value="';
 
 				foreach($ocena as $p) {
 					if($p <> 0) {

@@ -3,30 +3,36 @@ session_start();
 require_once('connection.php');
 require_once('functions.php');
 
-$username = htmlspecialchars(strip_tags($_POST['username']));
-$username = mysqli_real_escape_string($connect, $username);
-$password = htmlspecialchars(strip_tags($_POST['password']));
-$password = mysqli_real_escape_string($connect, $password);
-$repeat = htmlspecialchars(strip_tags($_POST['repeat']));
-$repeat = mysqli_real_escape_string($connect, $repeat);
+$username = strip($_POST['username'], $connect);
+$password = strip($_POST['password'], $connect);
+$repeat = strip($_POST['repeat'], $connect);
+$school = strip($_POST['school'], $connect);
+$grade = strip($_POST['grade'], $connect);
 
-$cmd = "SELECT * FROM `ucenik` WHERE `username`='$username'";
-$rows = mysqli_query($connect, $cmd) or die(mysqli_error($connect));
+$date = date('d.m.Y.');
+
+$cmd = "SELECT * FROM `~korisnik` WHERE `username`='$username'";
+$rows = mysqli_query($connect, $cmd);
 
 $number_of_rows = mysqli_num_rows($rows);
 
 if($number_of_rows > 0) {
-	handleError("Korisnik sa unetim imenom vec postoji");
+	show_error("Korisnik sa unetim korisnickim imenom vec postoji");
 }else {
 	if($password != $repeat) {
-		handleError("Lozinke se ne poklapaju");
+		show_error("Lozinke se ne poklapaju");
 	}else {
-		$password_hash = hashPassword($password);
+		$password_hash = hash_password($password);
 
-		$cmd = "INSERT INTO `ucenik`(`username`, `password`) VALUES('$username', '$password_hash')";
-		mysqli_query($connect, $cmd) or die(mysqli_error($connect));
+		$cmd = "INSERT INTO `~korisnik`(`username`, `password`, `school`, `grade`, `date`) VALUES('$username', '$password_hash', '$school', '$grade', '$date')";
+		mysqli_query($connect, $cmd);
 
-		header("location: login.html");
+		$_SESSION['username'] = $username;
+		$_SESSION['school'] = $school;
+		$_SESSION['grade'] = $grade;
+		$_SESSION['config'] = 0;
+
+		header("location: configure.html");
 	}
 }
 

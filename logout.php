@@ -2,7 +2,7 @@
 session_start();
 $_SESSION = array();
 session_destroy();
-$_SESSION['id'] = null;
+$_SESSION['username'] = null;
 
 header("location: index.php");
 ?>

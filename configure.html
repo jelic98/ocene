@@ -1,0 +1,38 @@
+<html>
+	<head>
+		<link rel="icon" href="icon-outline.ico" type="icon/ico">
+		<title>Predmeti</title>
+		<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+		<link href="main.css" rel='stylesheet' type='text/css'/>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	</head>
+	<body>
+		<div class="form">
+			<h1>Predmeti</h1>
+			<form class="w3-container" action="configure.php?total=3" method="post">
+				<div id="fields">
+					<p><input class="w3-input" name="1" type="text" placeholder="Predmet 1" autofocus required></p>
+					<p><input class="w3-input" name="2" type="text" placeholder="Predmet 2"></p>
+					<p><input class="w3-input" name="3" type="text" placeholder="Predmet 3"></p>
+				</div>
+				<button class="green" type="submit"><i class="fa fa-floppy-o"></i> Sacuvaj</button>
+				<button type="button" id="add" class="blue"><i class="fa fa-plus"></i> Dodaj predmet</button>
+				<a href="logout.php"><button type="button" class="red"><i class="fa fa-sign-out"></i> Odjavi se</button></a>
+			</form>
+		</div>
+		<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+		<script>
+			var counter = 3;
+
+			$("#add").click(function() {
+				counter++;
+				$('<p><input class="w3-input" name="' + counter + '" type="text" placeholder="Predmet ' + counter + '"></p>').appendTo("#fields");
+				$("body").animate({ scrollTop: $(document).height() }, "slow");
+			});
+
+			$("form").submit(function() {
+				$("form").attr("action", "configure.php?total=" + counter);
+			});
+		</script>
+	</body>
+</html>

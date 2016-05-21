@@ -1,24 +1,15 @@
 <?php
 session_start();
 require_once('connection.php');
+require_once('functions.php');
 
-$id = $_SESSION['id'];
-
-$cmd = "SELECT * FROM `ucenik` WHERE `id`='$id'";
-$rows = mysqli_query($connect, $cmd) or die(mysqli_error($connect));
-
-if($rows) {
-	while($row = mysqli_fetch_array($rows)) {
-		$username = $row['username'];
-	}
-}
-
-$message = htmlspecialchars(strip_tags($_POST['message']));
-$message = mysqli_real_escape_string($connect, $message);
+$username = $_SESSION['username'];
+$message = strip($_POST['message'], $connect);
+$date = date('d.m.Y.');
 
 if(!empty($message)) {
-	$cmd = "INSERT INTO `poruke`(`username`, `poruka`) VALUES('$username', '$message')";
-	mysqli_query($connect, $cmd) or die(mysqli_error($connect));
+	$cmd = "INSERT INTO `~poruka`(`username`, `text`, `date`) VALUES('$username', '$message', '$date');";
+	mysqli_query($connect, $cmd);
 }
 
 header("location: index.php");

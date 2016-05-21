@@ -4,7 +4,7 @@ require_once('connection.php');
 
 $login = 0;
 
-if(!empty($_SESSION['id'])) {
+if(!empty($_SESSION['username'])) {
 	$login = 1; 
 }
 ?>
@@ -27,43 +27,37 @@ if(!empty($_SESSION['id'])) {
 	<body>  
 		<?php
 		if($login == 1) {
-			$predmeti = array("srpski","engleski","drstr","filozofija","istorija","geografija","biologija","matematika","fizika","informatika","hemija","fizicko","vladanje");
+			$username = $_SESSION['username'];
+			$config = $_SESSION['config'];
+
+			if($config == 0) {
+				header("location: configure.html");
+			}
+
+			$predmeti = array();
 			$ocene = array();
 
-			$id = $_SESSION['id'];
+			$cmd = "SHOW COLUMNS FROM `".$username."`;";
+			$result = mysqli_query($connect, $cmd);
+
+			while($row = mysqli_fetch_array($result)){
+				$predmeti[] = $row['Field'];
+			}
+
+			$cmd = "SELECT * FROM `".$username."`;";
+			$result = mysqli_query($connect, $cmd);
+			$rows = mysqli_fetch_row($result);
+
+			for($i = 0; $i < count($predmeti); $i++) {
+				$_SESSION[$predmeti[$i]] = $rows[$i];
+			}
 
 			$prosek_kraj = 0;
 			$suma_kraj = 0;
 			$predmeti_kraj = 0;
 			$broj_jedinica = 0;
 
-			$cmd = "SELECT * FROM `ucenik` WHERE `id`='$id'";
-			$rows = mysqli_query($connect, $cmd) or die(mysqli_error($connect));
-
-			$number_of_rows = mysqli_num_rows($rows);
-
-			if($rows) {
-				while($row = mysqli_fetch_array($rows)) {
-					$username = $row['username'];
-					$_SESSION['srpski'] = $row['srp'];
-					$_SESSION['engleski'] = $row['eng'];
-					$_SESSION['drstr'] = $row['jez'];
-					$_SESSION['filozofija'] = $row['fil'];
-					$_SESSION['istorija'] = $row['ist'];
-					$_SESSION['geografija'] = $row['geo'];
-					$_SESSION['biologija'] = $row['bio'];
-					$_SESSION['matematika'] = $row['mat'];
-					$_SESSION['fizika'] = $row['fiz'];
-					$_SESSION['informatika'] = $row['inf'];
-					$_SESSION['hemija'] = $row['hem'];
-					$_SESSION['fizicko'] = $row['fzc'];
-					$_SESSION['vladanje'] = $row['vla'];
-				}
-			}
-
-			mysqli_close($connect);
-
-			for($i = 1; $i <= 13; $i++) {
+			for($i = 1; $i <= count($predmeti); $i++) {
 				$string = $_SESSION[$predmeti[$i-1]];
 				$temp = array();
 
@@ -213,7 +207,7 @@ if(!empty($_SESSION['id'])) {
 				echo '<tr><td class="saveti">Ako hoces na more popravi '.$broj_jedinica.' '.$padez.'</td></tr>'; 
 			}
 
-			if($prosek_kraj == 5 && $broj_jedinica == 0) {
+			if(5 * count($predmeti) == $prosek2) {
 				echo '<tr><td class="saveti">Svaka cast!</td></tr>'; 
 			}
 

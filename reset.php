@@ -2,13 +2,20 @@
 session_start();
 require_once('connection.php');
 
-$id = $_SESSION['id'];
+$username = $_SESSION['username'];
 
-$predmeti = array("srp","eng","jez","fil","ist","geo","bio","mat","fiz","inf","hem","fzc","vla");
+$predmeti = array();
 
-for($i = 1; $i <= 13;$i++) {
-	$cmd = "UPDATE `ucenik` SET `".$predmeti[$i-1]."`='0' WHERE `id`='$id'";
-	mysqli_query($connect, $cmd) or die(mysqli_error($connect)); 
+$cmd = "SHOW COLUMNS FROM `".$username."`;";
+$result = mysqli_query($connect, $cmd);
+
+while($row = mysqli_fetch_array($result)){
+	$predmeti[] = $row['Field'];
+}
+
+for($i = 0; $i < count($predmeti); $i++) {
+	$cmd = "UPDATE `".$username."` SET `".$predmeti[$i]."`='0';";
+	mysqli_query($connect, $cmd); 
 }
 
 header("location: index.php");

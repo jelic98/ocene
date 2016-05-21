@@ -2,12 +2,18 @@
 session_start();
 require_once('connection.php');
 
-$id = $_SESSION['id'];
+$username = $_SESSION['username'];
 
-$baza = array("srp","eng","jez","fil","ist","geo","bio","mat","fiz","inf","hem","fzc","vla");
-$predmeti = array("srpski","engleski","drstr","filozofija","istorija","geografija","biologija","matematika","fizika","informatika","hemija","fizicko","vladanje");
+$predmeti = array();
 
-for($i = 1; $i <= 13;$i++) {
+$cmd = "SHOW COLUMNS FROM `".$username."`;";
+$result = mysqli_query($connect, $cmd);
+
+while($row = mysqli_fetch_array($result)){
+	$predmeti[] = $row['Field'];
+}
+
+for($i = 1; $i <= count($predmeti); $i++) {
 	$temp = htmlspecialchars(strip_tags($_GET[$predmeti[$i-1]]));
 	$temp = mysqli_real_escape_string($connect, $temp);
 
@@ -39,13 +45,13 @@ for($i = 1; $i <= 13;$i++) {
 			}
 
 			if($offset == 0) {
-				$cmd = "UPDATE `ucenik` SET `".$baza[$i-1]."`='$temp' WHERE `id`='$id'";
-				mysqli_query($connect, $cmd) or die(mysqli_error($connect));
+				$cmd = "UPDATE `".$username."` SET `".$predmeti[$i-1]."`='$temp';";
+				mysqli_query($connect, $cmd);
 			}
 		}
 	}else {
-		$cmd = "UPDATE `ucenik` SET `".$baza[$i-1]."`='0' WHERE `id`='$id'";
-		mysqli_query($connect, $cmd) or die(mysqli_error($connect));
+		$cmd = "UPDATE `".$username."` SET `".$predmeti[$i-1]."`='0';";
+		mysqli_query($connect, $cmd);
 	}
 }
 
