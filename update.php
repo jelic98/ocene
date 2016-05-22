@@ -13,6 +13,7 @@ if(!empty($_SESSION['username'])) {
 		<link rel="icon" href="icon-outline.ico" type="icon/ico">
 		<title>Izmena</title>
 		<link href="main.css" rel='stylesheet' type='text/css'/>
+		<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	</head>
 	<body>  
@@ -45,7 +46,7 @@ if(!empty($_SESSION['username'])) {
 			} 
 
 			echo '<h1>Izmena ocena</h1>';
-			echo '<form action="save.php" method="get">';
+			echo '<form class="w3-container" action="save.php" method="get">';
 			echo '<table>';
 			echo '<tr id="headline">';
 			echo '<td><b>PREDMET</b></td>';
@@ -72,11 +73,11 @@ if(!empty($_SESSION['username'])) {
 				echo '<td class="prva '.$red.'">'.strtoupper($predmeti[$index-1]).'</td>';
 
 				echo '<td class="druga '.$red.'">';
-				echo '<input name="'.$predmeti[$index - 1].'" type="text" value="';
+				echo '<input class="w3-input" name="'.$predmeti[$index - 1].'" type="text" value="';
 
 				foreach($ocena as $p) {
 					if($p <> 0) {
-						echo $p." ";  
+						echo $p.' ';  
 					} 
 
 					$suma += $p; 
@@ -87,6 +88,7 @@ if(!empty($_SESSION['username'])) {
 			}
 
 			echo '</table>';
+
 			echo '<a href="index.php"><button class="red"><i class="fa fa-arrow-left"></i> Nazad</button></a>';
 			echo '<button type="submit" class="blue"><i class="fa fa-floppy-o"></i> Sacuvaj</button>';
 			echo '</form>';
