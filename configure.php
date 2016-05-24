@@ -24,7 +24,7 @@ if($_SESSION['config'] == 0) {
 		}
 	}
 
-	$cmd .= ");";
+	$cmd .= ") CHARSET=utf8;";
 	mysqli_query($connect, $cmd);
 
 	$cmd_insert .= ") VALUES (";
