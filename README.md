@@ -2,6 +2,8 @@
 
 Grade tracker tool for students. 
 
+Check it out: http://ecloga.org/ocene
+
 Features:
 - Login/Register
 - Create custom classes
