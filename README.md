@@ -2,7 +2,7 @@
 
 Grade tracker tool for students. 
 
-Check it out: http://ecloga.org/ocene
+Check it out: http://ecloga.org/projects/ocene
 
 Features:
 - Login/Register
